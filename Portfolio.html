@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MONARCH SYSTEM | Ahmed Ghidaifi</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;700&family=Orbitron:wght@500;800&family=Michroma&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Solo Leveling Monarch Palette - Dark Blue + Purple Theme */
+      --bg-main: #0a0a0f;
+      --bg-secondary: #0f0f17;
+      --bg-tertiary: #151520;
+      --monarch-purple: #2d1b4e;
+      --monarch-magenta: #0066cc;
+      --monarch-light: #0d5a99;
+      --gold-accent: #7a8a9f;
+      --electric-blue: #00d9ff;
+      --energy-cyan: #00f0ff;
+      --void-shadow: rgba(0, 102, 204, 0.3);
+      --magenta-glow: rgba(0, 102, 204, 0.5);
+      --gold-glow: rgba(122, 138, 159, 0.4);
+      --text-primary: #ffffff;
+      --text-secondary: #8ab4ff;
+      --text-tertiary: #5a8cd9;
+      --panel-bg: rgba(15, 15, 23, 0.9);
+      --border-color: rgba(0, 102, 204, 0.4);
+      --border-gold: rgba(122, 138, 159, 0.3);
+    }
+
+    * { 
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box; 
+      font-family: 'Rajdhani', sans-serif; 
+      scroll-behavior: smooth; 
+    }
+
+    body { 
+      background-color: var(--bg-main); 
+      color: var(--text-primary); 
+      overflow-x: hidden; 
+      position: relative;
+    }
+
+    /* Animated grid background */
+    .system-grid {
+      position: fixed; 
+      inset: 0;
+      background-image: 
+        linear-gradient(rgba(0, 102, 204, 0.08) 1px, transparent 1px), 
+        linear-gradient(90deg, rgba(0, 102, 204, 0.08) 1px, transparent 1px);
+      background-size: 50px 50px; 
+      opacity: 0.5; 
+      z-index: -2; 
+      pointer-events: none;
+      animation: gridPulse 8s ease-in-out infinite;
+    }
+
+    @keyframes gridPulse {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 0.6; }
+    }
+
+    /* Scanline effect */
+    body::after {
+      content: ""; 
+      position: fixed; 
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg, 
+        rgba(0, 0, 0, 0.12) 0px, 
+        rgba(0, 0, 0, 0.12) 1px, 
+        transparent 1px, 
+        transparent 2px
+      );
+      pointer-events: none; 
+      z-index: 100;
+    }
+
+    /* Particle canvas */
+    canvas#particles { 
+      position: fixed; 
+      inset: 0; 
+      z-index: -1; 
+      opacity: 0.8;
+    }
+
+    /* Header */
+    header {
+      padding: 25px 5%; 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center;
+      background: linear-gradient(
+        180deg, 
+        rgba(10, 10, 15, 0.95) 0%, 
+        rgba(10, 10, 15, 0.8) 100%
+      );
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border-color);
+      border-image: linear-gradient(to right, var(--monarch-magenta), transparent) 1;
+      position: sticky; 
+      top: 0; 
+      z-index: 1000;
+      box-shadow: 0 0 30px rgba(217, 70, 239, 0.1);
+    }
+
+    .logo {
+      font-family: 'Orbitron', sans-serif; 
+      font-weight: 900; 
+      font-size: 1.4rem;
+      letter-spacing: 3px;
+      background: linear-gradient(135deg, var(--monarch-magenta), var(--electric-blue), var(--gold-accent));
+      -webkit-background-clip: text; 
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 0 0 20px var(--magenta-glow);
+      filter: drop-shadow(0 0 15px var(--magenta-glow));
+    }
+
+    nav { display: flex; gap: 35px; }
+    nav a { 
+      color: var(--text-secondary); 
+      text-decoration: none; 
+      font-weight: 700; 
+      text-transform: uppercase; 
+      font-size: 0.75rem; 
+      letter-spacing: 2px;
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+    }
+
+    nav a::before {
+      content: "";
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(to right, var(--monarch-magenta), var(--electric-blue));
+      transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    nav a:hover { 
+      color: var(--monarch-magenta);
+      text-shadow: 0 0 15px var(--magenta-glow);
+    }
+
+    nav a:hover::before {
+      width: 100%;
+    }
+
+    /* Sections */
+    section { 
+      padding: 100px 8%; 
+      position: relative;
+      z-index: 10;
+    }
+
+    /* Hero Section */
+    .hero { 
+      min-height: 100vh; 
+      display: flex; 
+      align-items: center;
+      padding: 60px 8%;
+    }
+
+    .rank-s {
+      font-family: 'Orbitron', sans-serif; 
+      font-size: 7rem; 
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--monarch-magenta), var(--electric-blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 0 0 40px var(--magenta-glow);
+      filter: drop-shadow(0 0 30px var(--magenta-glow));
+      line-height: 0.9; 
+      margin-right: 20px;
+      animation: pulseRank 3s ease-in-out infinite;
+    }
+
+    @keyframes pulseRank {
+      0%, 100% { filter: drop-shadow(0 0 30px var(--magenta-glow)); }
+      50% { filter: drop-shadow(0 0 50px var(--magenta-glow)); }
+    }
+
+    .hero h2 { 
+      font-size: 4rem; 
+      margin-bottom: 25px; 
+      text-transform: uppercase; 
+      letter-spacing: 4px;
+      background: linear-gradient(to right, var(--text-primary), var(--text-secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 900;
+    }
+
+    .typing-effect {
+      font-size: 1.4rem; 
+      color: var(--electric-blue); 
+      border-right: 3px solid var(--monarch-magenta);
+      white-space: nowrap; 
+      overflow: hidden; 
+      display: inline-block; 
+      min-height: 1.8rem;
+      font-weight: 600;
+    }
+
+    .hero-description {
+      margin-top: 35px; 
+      color: var(--text-secondary); 
+      line-height: 1.9; 
+      border-left: 4px solid var(--monarch-magenta);
+      padding-left: 25px; 
+      background: linear-gradient(90deg, rgba(0, 102, 204, 0.15), transparent);
+      max-width: 700px;
+      font-size: 1.05rem;
+    }
+
+    .hero-description span {
+      color: var(--gold-accent);
+      font-weight: 700;
+      text-shadow: 0 0 10px var(--gold-glow);
+    }
+
+    /* Section Titles */
+    .section-title { 
+      font-family: 'Michroma', sans-serif; 
+      font-size: 2.5rem; 
+      margin-bottom: 60px; 
+      display: flex; 
+      align-items: center;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+    }
+
+    .section-title::before { 
+      content: "█ "; 
+      color: var(--monarch-magenta); 
+      margin-right: 15px;
+      font-size: 2rem;
+      animation: pulseTitle 2s ease-in-out infinite;
+    }
+
+    .section-title::after { 
+      content: " █"; 
+      color: var(--gold-accent); 
+      margin-left: 15px;
+      font-size: 2rem;
+    }
+
+    @keyframes pulseTitle {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    /* Grid Layout */
+    .grid { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); 
+      gap: 35px;
+    }
+
+    /* Cards */
+    .card {
+      background: linear-gradient(135deg, rgba(15, 15, 23, 0.8), rgba(13, 102, 204, 0.1));
+      border: 2px solid var(--border-color);
+      border-radius: 10px; 
+      padding: 35px; 
+      transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative; 
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0, 102, 204, 0.2), transparent);
+      transition: left 0.6s ease;
+    }
+
+    .card:hover::before {
+      left: 100%;
+    }
+
+    .card:hover { 
+      transform: translateY(-10px) translateX(-5px);
+      background: linear-gradient(135deg, rgba(15, 15, 23, 0.95), rgba(0, 102, 204, 0.15));
+      border-color: var(--monarch-magenta);
+      box-shadow: 
+        0 15px 40px rgba(0, 102, 204, 0.2),
+        inset 0 0 20px rgba(0, 102, 204, 0.1);
+    }
+
+    .card h4 { 
+      font-family: 'Orbitron', sans-serif; 
+      color: var(--monarch-magenta); 
+      margin-bottom: 18px; 
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-shadow: 0 0 10px var(--magenta-glow);
+    }
+
+    .card p {
+      color: var(--text-secondary);
+      line-height: 1.7;
+      font-size: 0.95rem;
+    }
+
+    /* Progress Bars */
+    .progress-bar-bg { 
+      height: 10px; 
+      background: rgba(255, 255, 255, 0.08); 
+      border-radius: 5px; 
+      margin: 12px 0 22px;
+      border: 1px solid rgba(0, 102, 204, 0.2);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-bar-fill { 
+      height: 100%; 
+      width: 0; 
+      border-radius: 5px; 
+      transition: width 1.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+    }
+
+    .fill-magenta { 
+      background: linear-gradient(90deg, var(--monarch-magenta), var(--monarch-light));
+      box-shadow: 0 0 15px var(--magenta-glow), inset 0 0 10px var(--magenta-glow);
+    }
+
+    .fill-gold { 
+      background: linear-gradient(90deg, var(--gold-accent), var(--monarch-light));
+      box-shadow: 0 0 15px var(--gold-glow), inset 0 0 10px var(--gold-glow);
+    }
+
+    .fill-cyan { 
+      background: linear-gradient(90deg, var(--electric-blue), var(--energy-cyan));
+      box-shadow: 0 0 15px rgba(0, 217, 255, 0.5), inset 0 0 10px rgba(0, 217, 255, 0.3);
+    }
+
+    /* Video Container */
+    .video-container { 
+      width: 100%; 
+      border-radius: 8px; 
+      margin-top: 18px; 
+      border: 2px solid var(--border-color);
+      overflow: hidden; 
+      background: #000;
+      transition: all 0.4s ease;
+      box-shadow: 0 0 20px rgba(217, 70, 239, 0.1);
+    }
+
+    .card:hover .video-container {
+      border-color: var(--monarch-magenta);
+      box-shadow: 0 0 30px rgba(217, 70, 239, 0.3);
+    }
+
+    video { 
+      width: 100%; 
+      display: block; 
+      aspect-ratio: 16/9;
+    }
+
+    /* Skill Box */
+    .skill-box {
+      margin-bottom: 15px;
+    }
+
+    .skill-box span:first-child {
+      color: var(--text-secondary);
+      font-weight: 600;
+    }
+
+    .skill-box span:last-child {
+      color: var(--monarch-magenta);
+      font-weight: 700;
+      text-shadow: 0 0 8px var(--magenta-glow);
+    }
+
+    /* Quest Card Special */
+    .quest-card {
+      background: linear-gradient(135deg, rgba(212, 165, 116, 0.1), rgba(0, 102, 204, 0.1));
+      border: 2px solid var(--gold-accent);
+    }
+
+    .quest-card h4 {
+      color: var(--gold-accent);
+      text-shadow: 0 0 15px var(--gold-glow);
+    }
+
+    .quest-card ul li {
+      color: var(--text-secondary);
+      margin: 10px 0;
+      transition: all 0.3s ease;
+    }
+
+    .quest-card ul li:hover {
+      color: var(--gold-accent);
+      text-shadow: 0 0 10px var(--gold-glow);
+      margin-left: 10px;
+    }
+
+    /* Footer */
+    footer { 
+      padding: 50px; 
+      text-align: center; 
+      background: linear-gradient(180deg, rgba(15, 15, 23, 0.8), rgba(10, 10, 15, 0.95));
+      border-top: 1px solid var(--border-color);
+      color: var(--text-tertiary); 
+      font-family: 'Michroma', sans-serif; 
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+    }
+
+    @keyframes blink { 
+      50% { border-color: transparent; } 
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .rank-s { font-size: 4rem; }
+      .hero h2 { font-size: 2.5rem; }
+      .section-title { font-size: 2rem; }
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="system-grid"></div>
+<canvas id="particles"></canvas>
+
+<header>
+  <div class="logo">MONARCH.SYSTEM</div>
+  <nav>
+    <a href="#projects">/// INSTANCES ///</a>
+    <a href="#skills">/// ABILITIES ///</a>
+    <a href="#quests">/// ARCHIVES ///</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-content">
+    <div style="display:flex; align-items:flex-start; margin-bottom:30px;">
+      <div class="rank-s">S</div>
+      <div style="font-family:'Orbitron'; letter-spacing:3px; color:var(--text-secondary); font-size:1.2rem; line-height:1.2;">
+        RANK<br>MONARCH<br>ARCHITECT
+      </div>
+    </div>
+    <h2>AHMED GHIDAIFI</h2>
+    <p class="typing-effect" id="typing-text"></p>
+    <p class="hero-description">
+      Master 1 Réseaux et Systèmes Distribués (USTHB). <br>
+      Architecte en déploiement d'infrastructures Client/Serveur, expert en administration Linux et créateur d'interfaces UI/UX immersives.
+      <br><br>
+      <span>[ SYSTÈME MONARCHIQUE ACTIVÉ ]</span>
+    </p>
+  </div>
+</section>
+
+<section id="projects">
+  <h3 class="section-title">MANIFESTATIONS ROYALES (Projets)</h3>
+  <div class="grid">
+    <div class="card">
+      <h4>CLIENT/SERVER GATE</h4>
+      <p>Portail d'inscription pour les participants au hackathon HACKINI 2.0 - Architecture distribuée en temps réel.</p>
+      <div class="video-container"><video controls><source src="video/video-3.mp4" type="video/mp4"></video></div>
+    </div>
+    <div class="card">
+      <h4>LINUX DOMINATION</h4>
+      <p>Automatisation Bash et hardening critiques pour environnements CTF - Maîtrise absolue du système.</p>
+      <div class="video-container"><video controls><source src="video/video-4.mp4" type="video/mp4"></video></div>
+    </div>
+    <div class="card">
+      <h4>SHELLMATES ASCENSION</h4>
+      <p>Refonte complète de l'interface et infrastructure web du club - Renaissance digitale.</p>
+      <div class="video-container"><video controls><source src="video/video-1.mp4" type="video/mp4"></video></div>
+    </div>
+    <div class="card">
+      <h4>BSIDES 2025 DOMINION</h4>
+      <p>Gestion d'équipe design et podium en temps réel - Contrôle total du domaine.</p>
+      <div class="video-container"><video controls><source src="video/video-2.mp4" type="video/mp4"></video></div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <h3 class="section-title">APTITUDES SOUVERAINES</h3>
+  <div class="grid">
+    <div class="card">
+      <h4>DOMAINE SYSTÈME</h4>
+      <div class="skill-box">
+        <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+          <span>Linux Admin (Bash/Unix)</span>
+          <span>90%</span>
+        </div>
+        <div class="progress-bar-bg"><div class="progress-bar-fill fill-magenta" data-width="90%"></div></div>
+      </div>
+      <div class="skill-box">
+        <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+          <span>Client/Server (AD/DNS)</span>
+          <span>88%</span>
+        </div>
+        <div class="progress-bar-bg"><div class="progress-bar-fill fill-magenta" data-width="88%"></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <h4>MAÎTRISE ROYALE</h4>
+      <div class="skill-box">
+        <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+          <span>Leadership UI/UX</span>
+          <span>100%</span>
+        </div>
+        <div class="progress-bar-bg"><div class="progress-bar-fill fill-gold" data-width="100%"></div></div>
+      </div>
+      <div class="skill-box">
+        <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+          <span>GUI Creation</span>
+          <span>92%</span>
+        </div>
+        <div class="progress-bar-bg"><div class="progress-bar-fill fill-gold" data-width="92%"></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <h4>ARSENAL TECHNOLOGIQUE</h4>
+      <div class="skill-box">
+        <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+          <span>Python / Django</span>
+          <span>90%</span>
+        </div>
+        <div class="progress-bar-bg"><div class="progress-bar-fill fill-cyan" data-width="90%"></div></div>
+      </div>
+      <div class="skill-box">
+        <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+          <span>Web Ops (Fullstack)</span>
+          <span>85%</span>
+        </div>
+        <div class="progress-bar-bg"><div class="progress-bar-fill fill-cyan" data-width="85%"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="quests">
+  <h3 class="section-title">QUÊTE SUPRÊME</h3>
+  <div class="card quest-card">
+    <h4>DESTINÉE : MAÎTRE DES SYSTÈMES</h4>
+    <p style="font-weight:bold; margin: 15px 0; color: white; font-size: 1.05rem;">Spécialisation RSD - USTHB</p>
+    <ul style="list-style:none; color:var(--text-secondary)">
+      <li>► Administration avancée des réseaux locaux et distants - Contrôle absolu</li>
+      <li>► Conception d'architectures C/S résilientes et distribuées</li>
+      <li>► Maîtrise des environnements Linux critiques et sécurisés</li>
+      <li>► Élévation du design UI/UX à des dimensions supérieures</li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  ⚫ MONARCH SYSTEM PROTOCOL ⚫ ARCHITECTED BY AHMED GHIDAIFI ⚫ 2026_V4.0 ⚫
+</footer>
+
+<script>
+  // Enhanced Particle System - Solo Leveling Style
+  const canvas = document.getElementById('particles');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  let connections = [];
+  
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  class Particle {
+    constructor() {
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * canvas.height;
+      this.speedX = (Math.random() - 0.5) * 0.6;
+      this.speedY = (Math.random() - 0.5) * 0.6;
+      this.size = Math.random() * 2.5;
+      this.opacity = Math.random() * 0.7 + 0.3;
+      this.color = ['#0066cc', '#00d9ff', '#7a8a9f'][Math.floor(Math.random() * 3)];
+    }
+
+    update() {
+      this.x += this.speedX;
+      this.y += this.speedY;
+      
+      if (this.x > canvas.width || this.x < 0) this.speedX *= -1;
+      if (this.y > canvas.height || this.y < 0) this.speedY *= -1;
+      
+      this.opacity = Math.sin(Date.now() * 0.001 + this.x + this.y) * 0.35 + 0.4;
+    }
+
+    draw() {
+      ctx.fillStyle = this.color;
+      ctx.globalAlpha = this.opacity;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+  }
+
+  function init() {
+    for (let i = 0; i < 120; i++) {
+      particles.push(new Particle());
+    }
+  }
+
+  function drawConnections() {
+    ctx.globalAlpha = 0.1;
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        
+        if (distance < 150) {
+          ctx.strokeStyle = '#0066cc';
+          ctx.lineWidth = 0.5;
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.stroke();
+        }
+      }
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    particles.forEach(p => {
+      p.update();
+      p.draw();
+    });
+    
+    drawConnections();
+    requestAnimationFrame(animate);
+  }
+
+  init();
+  animate();
+
+  // Typing Effect with Solo Leveling Theme
+  const text = "Mise à jour monarchique terminée. Protocoles Linux & Admin C/S activés.";
+  let i = 0;
+  function type() {
+    if (i < text.length) {
+      document.getElementById('typing-text').innerHTML += text.charAt(i);
+      i++;
+      setTimeout(type, 35);
+    } else {
+      document.getElementById('typing-text').style.animation = "blink 0.8s infinite";
+    }
+  }
+  setTimeout(type, 800);
+
+  // Progress Bar Animation on Intersection
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.querySelectorAll('.progress-bar-fill').forEach(bar => {
+          bar.style.width = bar.getAttribute('data-width');
+        });
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.card').forEach(card => observer.observe(card));
+
+  // Resize Canvas on Window Resize
+  window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  });
+</script>
+
+</body>
+</html>
